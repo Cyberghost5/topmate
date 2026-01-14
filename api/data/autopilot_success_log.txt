@@ -1,0 +1,1 @@
+{"status":true,"code":200,"data":{"message":"Y'ello! You have gifted 2GB to 2348137348028. Share link https:\/\/mtnapp.page.link\/myMTNNGApp with 2348137348028 to download the new MyMTN app for exciting offers.. Sender number: 090****3904","reference":"EAZY202506060613209OM9R320"},"time":"2025-06-06 06:13:23"}

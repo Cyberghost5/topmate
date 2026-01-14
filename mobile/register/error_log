@@ -1,0 +1,5 @@
+[04-Nov-2024 17:53:49 UTC] PHP Warning:  require_once(../home/includes/route.php): Failed to open stream: No such file or directory in /home1/databser/bizdataconnects.com.ng/mobile/register/index.php on line 24
+[04-Nov-2024 17:53:49 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '../home/includes/route.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home1/databser/bizdataconnects.com.ng/mobile/register/index.php:24
+Stack trace:
+#0 {main}
+  thrown in /home1/databser/bizdataconnects.com.ng/mobile/register/index.php on line 24

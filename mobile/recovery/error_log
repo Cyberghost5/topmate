@@ -1,0 +1,2 @@
+[11-Jul-2023 07:16:01 UTC] PHP Warning:  require_once(../../core/helpers/vendor/autoload.php): failed to open stream: No such file or directory in /home/skyrock1/public_html/mobile/home/includes/auto_loader.php on line 18
+[11-Jul-2023 07:16:01 UTC] PHP Fatal error:  require_once(): Failed opening required '../../core/helpers/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/skyrock1/public_html/mobile/home/includes/auto_loader.php on line 18

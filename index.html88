@@ -1,0 +1,846 @@
+<?php
+/*
+Developed By Daltech Digital Resources contact me on whatsapp 07035890194
+*/
+require_once('core/conn.php');
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <!------- seo started here</------->
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ 
+    ga('create', 'Databservices', 'auto');
+     ga('send', 'pageview');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-<?= $web['webgoogleads']; ?>" crossorigin="anonymous"></script>
+  
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="/upload/<?= $web['image']; ?>">
+    <meta name="twitter:title" content="Your Ultimate Destination for VTU Services: Buy Airtime, Data, Exam Pins, Data Pin, Airtime to Cash,   Print Recharge Cards, Bulk SMS and Pay Bills all at an Affordable Prices.  We got 24/7 Customer Support!>">
+    <meta name="twitter:description" content="Your Ultimate Destination for VTU Services: Buy Airtime, Data, Exam Pins, Data Pin, Airtime to Cash,   Print Recharge Cards, Bulk SMS and Pay Bills all at an Affordable Prices.  We got 24/7 Customer Support!>">
+    <meta name="twitter:image:src" content="/upload/<?= $web['image']; ?>">
+
+    <!-- Open Graph data -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Databservices - Your Ultimate Destination for VTU Services: Buy Airtime, Data, Exam Pins, Data Pin, Airtime to Cash,   Print Recharge Cards, Bulk SMS and Pay Bills all at an Affordable Prices.  We got 24/7 Customer Support!>">
+    <meta property="og:image" content="/upload/<?= $web['image']; ?>">
+    <meta property="og:description" content="Your Ultimate Destination for VTU Services: Buy Airtime, Data, Exam Pins, Data Pin, Airtime to Cash,   Print Recharge Cards, Bulk SMS and Pay Bills all at an Affordable Prices.  We got 24/7 Customer Support!>">
+    <meta property="og:site_name" content="Databservices"/>
+    <meta property="og:url" content="../index.php">
+    <meta property="og:type" content="Website/App">
+    
+    
+    
+		<meta charset="utf-8" />
+		<meta name="author" content="Themezhub" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Databservices | Your Ultimate Destination for VTU Services: Buy Airtime, Data, Exam Pins, Data Pin, Airtime to Cash,   Print Recharge Cards, Bulk SMS and Pay Bills all at an Affordable Prices.  We got 24/7 Customer Support!></title>
+		 
+        <!-- Custom CSS -->
+        <link rel="apple-touch-icon" sizes="120x120" href="/upload/<?= $web['image']; ?>">
+        <link rel="icon" type="image/png" sizes="32x32" href="/upload/<?= $web['image']; ?>">
+        <link href="view/assets/css/sty.css" rel="stylesheet">
+        <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style type="text/css">
+  	@media only screen and (max-width: 1500px) {
+  #img {
+    display: none;
+  }
+}
+  </style>
+    </head>
+	
+    <body>
+
+        <!-- ============================================================== -->
+        <!-- Main wrapper - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <div id="main-wrapper">
+		
+            <!-- ============================================================== -->
+            <!-- Top header  -->
+            <!-- ============================================================== -->
+            <!-- Start Navigation -->
+			<div class="header header-light dark-text">
+				<div class="container">
+					<nav id="navigation" class="navigation navigation-landscape">
+						<div class="nav-header">
+							<a class="nav-brand" href="/">
+							<img src="/upload/<?= $web['image']; ?>" alt="" height="50">
+							</a>
+							<div class="nav-toggle"></div>
+							<div class="mobile_nav">
+								<ul>
+								
+									<li class="account-drop">
+										<a href="/mobile/register//" class="crs_yuo12" >
+											<span class="embos_45"><i class="fas fa fa-user-plus"></i></span>
+										</a>
+									
+									</li>
+
+									<li>
+										<a href="/mobile/login/"  class="crs_yuo12">
+											<span class="embos_45"><i class="fas fa-sign-in-alt"></i></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="nav-menus-wrapper">
+							<ul class="nav-menu">
+								<li class=""><a href="/" style="color: #190C54">Home</a></li>
+								<li class=""><a href="#" style="color: #190C54">Services<span class="submenu-indicator"></span></a>
+									<ul class="nav-dropdown nav-submenu">
+									                         <li>
+<a href="/mobile/login/">Airtime Recharge</a>
+</li>
+<li class="nav-item">
+<a href="/mobile/login/">Data TopUp</a>
+</li>
+<li class="nav-item">
+<a href="/mobile/login/">Decoder Recharge</a>
+</li>
+<li class="nav-item">
+<a href="/mobile/login/">Electricity Bill</a>
+</li>
+<li class="nav-item">
+<a href="/mobile/login/">Exam Pins</a>
+</li>
+<li class="nav-item">
+<a href="/mobile/login/">Airtime To Cash</a>
+</li>
+									</ul>
+									
+								</li>
+								
+						
+								
+								<li class=""><a href="/" style="color: #190C54">About</a></li>
+									<li class=""><a href="/" style="color: #190C54">Contact</a></li>
+							</ul>
+							
+							<ul class="nav-menu nav-menu-social align-to-right">
+								
+								<li>
+									<a href="/mobile/login/" class="">
+										<i class="fas fa-sign-in-alt mr-1"></i><span class="dn-lg">Sign In</span>
+									</a>
+								</li>
+								<li class="add-listing" style="background-color: #190C54">
+									<a href="/mobile/register/" class="text-white">Signup</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+			<!-- End Navigation -->
+			<div class="clearfix"></div>
+			<!-- ============================================================== -->
+			<!-- Top header  -->
+			<!-- ============================================================== -->			
+			
+			<!-- ============================ Hero Banner  Start================================== -->
+			<div class="hero_banner image-cover image_bottom h6_bg">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="simple-search-wrap text-left">
+								<div class="hero_search-2">
+									<h1 class="banner_title mb-4" style="color: #190C54">The Best<br> Recharge & Utility Bills Payment platform
+                              </h1>
+									<p class="font-lg mb-4" style="color: #E43C17"> Automated & Instant Delivery; MTN, GOtv, PHED, Airtel, Startimes, WAEC, 9mobile, DSTV, etc. </p>
+									<div class="inline_btn">
+										<a href="/mobile/register/" class="btn"  style="background-color: #190C54">Signup</a>
+
+										<a href="/mobile/login/" class="btn"  style="background-color: #190C54">Sign In</a>
+									    
+									    <!--<a href="/connect/app/Databservices.apk" class="btn"  style="background-color: #190C54">Download APP</a>-->
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12">
+							<div class="side_block extream_img">
+								<div class="list_crs_img">
+									<img src="#" class="img-fluid elsio cirl animate-fl-y" alt="" />
+									<img src="#" class="img-fluid elsio arrow animate-fl-x" alt="" />
+									<img src="#" class="img-fluid elsio moon animate-fl-x" alt="" />
+								</div>
+								<div class="lmp_thumb">
+								<img src="/pages/photo.png" class="img-fluid" alt="" style="border-radius: 50px;">
+							</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ============================ Hero Banner End ================================== -->
+			
+			<!-- ================================ Tag Award ================================ -->
+			<section class="p-0">
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-lg-12 col-md-12 col-sm-12">
+							<div class="crp_box fl_color ovr_top">
+								<div class="row align-items-center">
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+										<div class="dro_140">
+											<div class="dro_141" style="color: #190C54"><i class="fa fa-user-plus"></i></div>
+											<div class="dro_142">
+												<h6>Signup</h6>
+												<p>Create A Free Online Account With Us And Get An Online Wallet.</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+										<div class="dro_140">
+											<div class="dro_141" style="color: #190C54"><i class="fa fa-credit-card"></i></div>
+											<div class="dro_142">
+												<h6>Fund Wallet</h6>
+												<p>Fund Your Wallet Using ATM Card, Cash Deposit, Online Transfer, etc..</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
+										<div class="dro_140">
+											<div class="dro_141" style="color: #190C54"><i class="fa fa-smile-o"></i></div>
+											<div class="dro_142">
+												<h6>Enjoy Services</h6>
+												<p>
+												
+												Enjoy Our Services Charged From Your Wallet.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+			</section>
+			<!-- ================================ Tag Award ================================ -->
+				<div class="clearfix"></div>
+
+			<!-- ============================ How It Works Start ================================== -->
+			<section class="">
+				<div class="container">
+					
+					<div class="row justify-content-center">
+						<div class="col-lg-7 col-md-8">
+							<div class="sec-heading center">
+								<h2 style="color: #190C54">Why<span class="" style="color: #190C54"> Choose Us?</span></h2>
+								<p></p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row justify-content-center mt-5">
+						
+						<!-- Single Location -->
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="wrk_grid">
+								<div class="wrk_grid_ico" style="background-color: #190C54">
+									<i class="fa fa-magic"></i>
+								</div>
+								<div class="wrk_caption">
+									<h4 style="color: #190C54">Automated Delivery</h4>
+									<p>We have swift automated system with a 24/7 delivery service almost instantly, nothing beats a seamless process..
+
+</p>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Single Location -->
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="wrk_grid active" style="background-color: #190C54">
+								<div class="wrk_grid_ico" style="background-color: #fff">
+									<i class="fa fa-percent" style="color: #190C54"></i>
+								</div>
+								<div class="wrk_caption">
+									<h4 style="color: #190C54">Big Discounts</h4>
+									<p>Enjoy massive discount on our platform when you make purchase for your day to day needs.</p>
+								</div>
+							</div>
+						</div>
+						
+						<!-- Single Location -->
+						<div class="col-lg-4 col-md-4 col-sm-6">
+							<div class="wrk_grid">
+								<div class="wrk_grid_ico" style="background-color: #190C54">
+									<i class="fas fa-headset"></i>
+								</div>
+								<div class="wrk_caption">
+									<h4 style="color: #190C54">24/7 Support</h4>
+									<p>We guarantee our customers top notch services all time. Hence, we are always respond to your needs.</p>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</section>
+			<!-- ============================ Cources Start ================================== -->
+<section class="min gray">
+				<div class="container">
+					
+					<div class="row justify-content-center">
+						<div class="col-lg-7 col-md-8">
+							<div class="sec-heading center">
+								<h2 style="color: #190C54">Our <span class="">Services</span></h2>
+								<p>Automated Instant Delivery.</p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row justify-content-center">
+					
+						<!-- Single Grid -->
+						<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+							<div class="crs_grid">
+								<div class="crs_grid_thumb">
+									<a href="/mobile/login/" class="crs_detail_link">
+										<img src="view/ass/img/Ucall.png" style="height:200px; margin-left:60px" class="img-fluid rounded" alt="">
+									</a>
+									<div class="crs_video_ico">
+										<i class="fa fa-play"></i>
+									</div>
+									<div class="crs_locked_ico">
+										<i class="fa fa-lock"></i>
+									</div>
+								</div>
+								<div class="crs_grid_caption">
+									<div class="crs_flex">
+										<div class="crs_fl_first">
+											<div class="crs_cates cl_8"><span>MTN, Airtel, GLO & 9mobile.</span></div>
+										</div>
+										
+									</div>
+									<div class="crs_title"><h4><a href="/mobile/login/" style="font-size:20px;" class="crs_title_link">Airtime Recharge</a></h4></div>
+								
+								</div>
+								
+							</div>
+						</div>
+						
+						
+						
+						<!-- Single Grid -->
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+							<div class="crs_grid">
+								<div class="crs_grid_thumb">
+										<img src="view/ass/img/padata.png" style="height:200px;margin-left:70px" class="img-fluid rounded" alt="">
+									<a href="/mobile/login/" class="crs_detail_link">
+										<img src="view/ass/img/adata.jpg" style="height:200px; margin-left:20px" class="img-fluid rounded" alt="">
+									</a>
+									<div class="crs_video_ico">
+										<i class="fa fa-play"></i>
+									</div>
+									<div class="crs_locked_ico">
+										<i class="fa fa-lock"></i>
+									</div>
+								</div>
+                                
+								<div class="crs_grid_caption">
+									<div class="crs_flex">
+										<div class="crs_fl_first">
+											<div class="crs_cates cl_1"><span>MTN, Airtel, GLO & 9mobile.</span></div>
+										</div>
+										
+									</div>
+									<div class="crs_title"><h4><a href="/mobile/login/" style="font-size:20px;" class="crs_title_link">Data Recharge</a></h4></div>
+								
+								</div>
+								
+							</div>
+						</div>
+						<!-- Single Grid -->
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+							<div class="crs_grid">
+								<div class="crs_grid_thumb">
+									<a href="/mobile/login/" class="crs_detail_link">
+										<img src="view/ass/img/dec.jpg" style="height:200px;margin-left:70px" class="img-fluid rounded" alt="">
+									</a>
+									<div class="crs_video_ico">
+										<i class="fa fa-play"></i>
+									</div>
+									<div class="crs_locked_ico">
+										<i class="fa fa-lock"></i>
+									</div>
+								</div>
+								<div class="crs_grid_caption">
+									<div class="crs_flex">
+										<div class="crs_fl_first">
+											<div class="crs_cates cl_4"><span>Startimes, DStv & GOtv.</span></div>
+										</div>
+										
+									</div>
+									<div class="crs_title"><h4><a href="/mobile/login/" style="font-size:20px;" class="crs_title_link">Cable TV Subscription</a></h4></div>
+								
+								</div>
+								
+							</div>
+						</div>
+						<!-- Single Grid -->
+						<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+							<div class="crs_grid">
+								<div class="crs_grid_thumb">
+									<a href="/mobile/login/" class="crs_detail_link">
+										<img src="view/ass/img/pelects.png" style="height:200px; margin-left:50px" class="img-fluid rounded" alt="">
+									</a>
+									<div class="crs_video_ico">
+										<i class="fa fa-play"></i>
+									</div>
+									<div class="crs_locked_ico">
+										<i class="fa fa-lock"></i>
+									</div>
+								</div>
+								<div class="crs_grid_caption">
+									<div class="crs_flex">
+										<div class="crs_fl_first">
+											<div class="crs_cates cl_5"><span>IKEDC, AEDC, PHEDC, ETC</span></div>
+										</div>
+										
+									</div>
+									<div class="crs_title"><h4><a href="/mobile/login/" style="font-size:20px;" class="crs_title_link">Electricity Bill Payment</a></h4></div>
+								
+								</div>
+								
+							</div>
+						</div>
+						<!-- Single Grid -->
+						<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+							<div class="crs_grid">
+								<div class="crs_grid_thumb">
+									<a href="/mobile/login/" class="crs_detail_link">
+										<img src="view/ass/img/pcash.png" style="height:200px; margin-left:40px" class="img-fluid rounded" alt="">
+									</a>
+									<div class="crs_video_ico">
+										<i class="fa fa-play"></i>
+									</div>
+									<div class="crs_locked_ico">
+										<i class="fa fa-lock"></i>
+									</div>
+								</div>
+								<div class="crs_grid_caption">
+									<div class="crs_flex">
+										<div class="crs_fl_first">
+											<div class="crs_cates cl_6"><span>MTN, Airtel, GLO & 9mobile.</span></div>
+										</div>
+										
+									</div>
+									<div class="crs_title"><h4><a href="#" style="font-size:20px;" class="crs_title_link">Airtime To Cash</a></h4></div>
+								
+								</div>
+								
+							</div>
+						</div>	
+						<!-- Single Grid -->
+						<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12">
+							<div class="crs_grid">
+								<div class="crs_grid_thumb">
+									<a href="/mobile/login/" class="crs_detail_link">
+										<img src="view/ass/img/aresult.png" style="height:200px; margin-left:40px" class="img-fluid rounded" alt="">
+									</a>
+									<div class="crs_video_ico">
+										<i class="fa fa-play"></i>
+									</div>
+									<div class="crs_locked_ico">
+										<i class="fa fa-lock"></i>
+									</div>
+								</div>
+								<div class="crs_grid_caption">
+									<div class="crs_flex">
+										<div class="crs_fl_first">
+											<div class="crs_cates cl_7"><span>AEC, NECO, JAMB, NABTEB, e.t.c...</span></div>
+										</div>
+										
+									</div>
+									<div class="crs_title"><h4><a href="/mobile/login/" style="font-size:20px;" class="crs_title_link">Exam Pin</a></h4></div>
+								
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					
+				
+					
+				</div>
+			</section>
+		
+			<div class="clearfix"></div>
+<section class="min">
+				<div class="container">
+				
+					<div class="row justify-content-center">
+						<div class="col-lg-7 col-md-8">
+							<div class="sec-heading center">
+								<h2 style="color: #190C54">Our Pricing <span class="">Plan</span></h2>
+								<p>The plan a user is subscribed to determines the amount of discount the user will get for our services..</p>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row align-items-center">
+												<!-- Single Package -->
+					<div class="col-lg-3 col-md-4">
+							<div class="pricing_wrap">
+								<div class="prt_head">
+									<h4 style="color: #190C54">MTN</h4>
+									<img src="view/assets/img/mtn.png" height="50" style="border-radius: 50%">
+								</div>
+								<!--<div class="prt_price">-->
+								<!--	<h2 style="color: #190C54"><span>₦</span>227</h2>-->
+								<!--	<span></span>-->
+								<!--</div>-->
+								<div class="" style="text-align: center;">
+									<ul>
+										<li>One	Month Valid</li>
+										<li>Support	4G LITE</li>
+										<li>Hotspot	Sharing</li>
+										<li>Laptop	Usage</li>
+									
+									</ul>
+								</div>
+								<div class="prt_footer">
+									<a href="/mobile/login/" class="btn choose_package" style="background-color: #190C54;color: white;">Shop Now</a>
+								</div>
+							</div>
+						</div>
+														
+						<div class="col-lg-3 col-md-4">
+							<div class="pricing_wrap">
+								<div class="prt_head">
+									<h4 style="color: #190C54">GLO</h4>
+									<img src="view/assets/img/glo.png" height="50" style="border-radius: 50%">
+								</div>
+								<!--<div class="prt_price">-->
+								<!--	<h2 style="color: #190C54"><span>₦</span>440</h2>-->
+								<!--	<span></span>-->
+								<!--</div>-->
+								<div class="" style="text-align: center;">
+									<ul>
+										<li>One	Month Valid</li>
+										<li>Support	4G LITE</li>
+										<li>Hotspot	Sharing</li>
+										<li>Laptop	Usage</li>
+									
+									</ul>
+								</div>
+								<div class="prt_footer">
+									<a href="/mobile/login/" class="btn choose_package" style="background-color: #190C54;color: white;">Shop Now</a>
+								</div>
+							</div>
+						</div>
+									
+
+					<div class="col-lg-3 col-md-4">
+							<div class="pricing_wrap">
+								<div class="prt_head">
+									<h4 style="color: #190C54">AIRTEL</h4>
+									<img src="view/assets/img/airtel.png" height="50" style="border-radius: 50%">
+								</div>
+								<!--<div class="prt_price">-->
+								<!--	<h2 style="color: #190C54"><span>₦</span>320</h2>-->
+								<!--	<span></span>-->
+								<!--</div>-->
+								<div class="" style="text-align: center;">
+									<ul>
+										<li>One	Month Valid</li>
+										<li>Support	4G LITE</li>
+										<li>Hotspot	Sharing</li>
+										<li>Laptop	Usage</li>
+									
+									</ul>
+								</div>
+								<div class="prt_footer">
+									<a href="/mobile/login/" class="btn choose_package" style="background-color: #190C54;color: white;">Shop Now</a>
+								</div>
+							</div>
+						</div>
+									
+
+							
+						<div class="col-lg-3 col-md-4">
+							<div class="pricing_wrap">
+								<div class="prt_head">
+									<h4 style="color: #190C54">9MOBILE</h4>
+									<img src="view/assets/img/mobile.png" height="50" style="border-radius: 50%">
+								</div>
+								<!--<div class="prt_price">-->
+								<!--	<h2 style="color: #190C54"><span>₦</span>250</h2>-->
+								<!--	<span></span>-->
+								<!--</div>-->
+								<div class=""  style="text-align: center;">
+									<ul>
+										<li>One	Month Valid</li>
+										<li>Support	4G LITE</li>
+										<li>Hotspot	Sharing</li>
+										<li>Laptop	Usage</li>
+									
+									</ul>
+								</div>
+								<div class="prt_footer">
+									<a href="/mobile/login/" class="btn choose_package" style="background-color: #190C54;color: white;">Shop Now</a>
+								</div>
+							</div>
+						</div>
+														
+												<!-- Single Package -->
+
+						
+					</div>
+					
+				</div>
+			</section>
+				<div class="clearfix"></div>
+	<section class="gray">
+				<div class="container">
+				
+					<div class="row justify-content-center">
+						<div class="col-lg-7 col-md-8">
+							<div class="sec-heading center">
+								<h2 style="color: #190C54">Our Customer <span class="">Reviews</span></h2>
+								</div>
+						</div>
+					</div>
+					
+					<div class="row justify-content-center">
+						<div class="col-xl-12 col-lg-12 col-sm-12">
+							
+							<div class="reviews-slide space">
+								
+								<!-- Single Item -->
+								<div class="single_items lios_item">
+									<div class="_testimonial_wrios shadow_none">
+										<div class="_testimonial_flex">
+											<div class="_testimonial_flex_first">
+												<div class="_tsl_flex_thumb">
+														<img src="view/ass/img/test.png" class="img-fluid" alt="">
+												</div>
+												<div class="_tsl_flex_capst">
+													<h5 style="color: #FFC40C">Mabel Emmanuel</h5>
+													<div class="_ovr_posts"><span>Customer</span></div>
+													<div class="_ovr_rates"><span><i class="fa fa-star"></i></span>4.5</div>
+												</div>
+											</div>
+										
+										</div>
+										
+										<div class="facts-detail">
+											<p> Keep up the good job Databservices, always fast and reliable.</p>
+										</div>
+									</div>
+								</div>
+								
+								<!-- Single Item -->
+								<div class="single_items lios_item">
+									<div class="_testimonial_wrios shadow_none">
+										<div class="_testimonial_flex">
+											<div class="_testimonial_flex_first">
+												<div class="_tsl_flex_thumb">
+													<img src="view/ass/img/test.png" class="img-fluid" alt="">
+												</div>
+												<div class="_tsl_flex_capst">
+													<h5 style="color: #FFC40C">Lawyer Ojekunle </h5>
+													<div class="_ovr_posts"><span>Legal Practitioner</span></div>
+													<div class="_ovr_rates"><span><i class="fa fa-star"></i></span>4.9</div>
+												</div>
+											</div>
+										
+										</div>
+										
+										<div class="facts-detail">
+											<p>Databservices is efficient, effectual and promptly timeous in responding to customers' requests. I have enjoyed its services several times and I can confirm its business integrity.</p>
+										</div>
+									</div>
+								</div>
+								
+								<!-- Single Item -->
+								<div class="single_items lios_item">
+									<div class="_testimonial_wrios shadow_none">
+										<div class="_testimonial_flex">
+											<div class="_testimonial_flex_first">
+												<div class="_tsl_flex_thumb">
+													<img src="view/ass/img/test.png" class="img-fluid" alt="">
+												</div>
+												<div class="_tsl_flex_capst">
+													<h5 style="color: #FFC40C">Olubukola Taiwo </h5>
+													<div class="_ovr_posts"><span>Teacher</span></div>
+													<div class="_ovr_rates"><span><i class="fa fa-star"></i></span>4.7</div>
+												</div>
+											</div>
+										
+										</div>
+										
+										<div class="facts-detail">
+											<p>I must say that Databservices is the best. Their service is second to none and the durability of their data bundle is incredible. 🥰🥰🥰</p>
+										</div>
+									</div>
+								</div>
+								
+								<!-- Single Item -->
+								<div class="single_items lios_item">
+									<div class="_testimonial_wrios shadow_none">
+										<div class="_testimonial_flex">
+											<div class="_testimonial_flex_first">
+												<div class="_tsl_flex_thumb">
+														<img src="view/ass/img/test.png" class="img-fluid" alt="">
+												</div>
+												<div class="_tsl_flex_capst">
+													<h5 style="color: #FFC40C">Ajadi Agnes </h5>
+													<div class="_ovr_posts"><span>Content Writer/Blogger</span></div>
+													<div class="_ovr_rates"><span><i class="fa fa-star"></i></span>4.7</div>
+												</div>
+											</div>
+										
+										</div>
+										
+										<div class="facts-detail">
+											<p>Your service is one of the best out there, for real.
+
+I love how you relate with customers and how swift your responses are. Your service is reliable as well, and the data do last long. 
+
+I'll rate your service 10/10. Databservices. Here are your flowers. 😚💐💐😂</p>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+						
+						</div>
+					</div>
+					
+				</div>
+			</section>
+				<div class="clearfix"></div>
+			<!-- ============================ article End ================================== -->
+			
+	
+		<!-- ============================ Call To Action ================================== -->
+			<section class="call_action_wrap-wrap" style="background-color: #190C54">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							
+							<div class="call_action_wrap">
+								<div class="call_action_wrap-head">
+									<h3>Do You Have Questions ?</h3>
+									<span>We'll help you to grow your career and growth.</span>
+								</div>
+								<a href="https://wa.link/0o0can" class="btn btn-call_action_wrap">Contact Us Today</a>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- ============================ Call To Action End ================================== -->
+			
+			<!-- ============================ Footer Start ================================== -->
+			<footer class=" skin-dark-footer style-2">
+				<div class="footer-middle">
+					<div class="container">
+						<div class="row">
+							
+							<div class="col-lg-5 col-md-5">
+								<div class="footer_widget">
+							
+									<h4 class="extream mb-3" style="color: #190C54">Databservices</h4>
+									<p>Databservices Enterprises, We Are The Best
+Recharge & Utility Bills Payment Platform</p>
+								
+								</div>
+							</div>
+							
+							<div class="col-lg-6 col-md-7 ml-auto">
+								<div class="row">
+								
+									<div class="col-lg-6 col-md-4">
+										<div class="footer_widget">
+											<h4 class="widget_title">Quick Links</h4>
+											<ul class="footer-menu">
+											<li><a href="/">Home</a></li>
+<li><a href="/">About</a></li>
+<li><a href="/">Contact</a></li>
+<li><a href="/mobile/register/">Register</a></li>
+<li><a href="/mobile/login/">Login</a></li>
+											</ul>
+										</div>
+									</div>
+											
+									<div class="col-lg-6 col-md-4">
+										<div class="footer_widget">
+											<h4 class="widget_title">Services</h4>
+											
+											<ul class="footer-menu">
+											<li><a href="/mobile/login/">Airtime Recharge</a></li>
+<li><a href="#">Airtime To Cash</a></li>
+<li><a href="/mobile/login/">Data Recharge</a></li>
+<li><a href="/mobile/login/">Decoder Tv Subscription</a></li>
+<li><a href="/mobile/login/">Electricity Bill</a></li>
+<li><a href="/mobile/login/">Exam Pin Checker</a></li>
+											</ul>
+										</div>
+									</div>
+							
+								
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="footer-bottom">
+					<div class="container">
+						<div class="row align-items-center">
+							<div class="col-lg-12 col-md-12 text-center">
+                            <p class="mb-0">© 2025 Databservices</p>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</footer>
+			<!-- ============================ Footer End ================================== -->
+			
+		
+			<a id="back2Top" class="top-scroll" title="Back to top" href="#"><i class="ti-arrow-up"></i></a>
+			
+
+		</div>
+		<!-- ============================================================== -->
+		<!-- End Wrapper -->
+		<!-- ============================================================== -->
+
+		<!-- ============================================================== -->
+		<!-- All Jquery -->
+		<!-- ============================================================== -->
+		<script src="view/assets/js/jquery.min.js"></script>
+		<script src="view/assets/js/popper.min.js"></script>
+		<script src="view/assets/js/bootstrap.min.js"></script>
+		<script src="view/assets/js/select2.min.js"></script>
+		<script src="view/assets/js/slick.js"></script>
+		<script src="view/assets/js/moment.min.js"></script>
+		<script src="view/assets/js/daterangepicker.js"></script> 
+		<script src="view/assets/js/summernote.min.js"></script>
+		<script src="view/assets/js/metisMenu.min.js"></script>	
+		<script src="view/assets/js/custom.js"></script>
+		<!-- ============================================================== -->
+		<!-- This page plugins -->
+		<!-- ============================================================== -->		
+
+	</body>
+
+<!-- Mirrored from peculiarsub.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 11 Jul 2022 14:35:52 GMT -->
+</html>

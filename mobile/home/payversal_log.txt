@@ -1,0 +1,1 @@
+{"status":true,"service":"CREATE_VIRTUAL_ACCOUNT","business":"077DCB84C44848CCA3B718DE14564CA7","banks":{"bankCode":"120001","bankName":"9Payment Service Bank","accountNumber":"5746363462","accountName":"Bizdataconnects-Romeo Romeo","account_type":"DYNAMIC","expire_date":"2025-03-31T02:40:00.306462+01:00","trackingReference":"FHHC7PXOO2FFE90989YW7AN7"},"errors":[]}

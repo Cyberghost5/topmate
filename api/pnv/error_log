@@ -1,0 +1,3 @@
+[28-Feb-2025 23:24:27 Africa/Lagos] PHP Warning:  Undefined variable $amount in /home1/databser/app.databservices.com.ng/api/pnv/index.php on line 157
+[28-Feb-2025 23:25:00 Africa/Lagos] PHP Warning:  Undefined property: stdClass::$Status in /home1/databser/app.databservices.com.ng/core/Controllers/PNV.php on line 145
+[28-Feb-2025 23:25:00 Africa/Lagos] PHP Warning:  Undefined property: stdClass::$Status in /home1/databser/app.databservices.com.ng/core/Controllers/PNV.php on line 145

@@ -1,0 +1,28 @@
+[19-Dec-2024 23:24:01 Africa/Lagos] PHP Warning:  Undefined property: stdClass::$AccessToken in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 273
+[19-Dec-2024 23:24:02 Africa/Lagos] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php:336
+Stack trace:
+#0 /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php(121): Cable->purchaseCableWithBasicAuthentication()
+#1 /home1/databser/bizdataconnects.com.ng/api/cabletv/index.php(238): Cable->purchaseCableTv()
+#2 {main}
+  thrown in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 336
+[19-Dec-2024 23:26:47 Africa/Lagos] PHP Warning:  Undefined property: stdClass::$AccessToken in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 273
+[19-Dec-2024 23:26:48 Africa/Lagos] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php:336
+Stack trace:
+#0 /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php(121): Cable->purchaseCableWithBasicAuthentication()
+#1 /home1/databser/bizdataconnects.com.ng/api/cabletv/index.php(238): Cable->purchaseCableTv()
+#2 {main}
+  thrown in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 336
+[20-Dec-2024 15:44:39 Africa/Lagos] PHP Warning:  Undefined property: stdClass::$AccessToken in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 273
+[20-Dec-2024 15:44:40 Africa/Lagos] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php:336
+Stack trace:
+#0 /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php(121): Cable->purchaseCableWithBasicAuthentication()
+#1 /home1/databser/bizdataconnects.com.ng/api/cabletv/index.php(238): Cable->purchaseCableTv()
+#2 {main}
+  thrown in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 336
+[20-Dec-2024 15:46:52 Africa/Lagos] PHP Warning:  Undefined property: stdClass::$AccessToken in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 273
+[20-Dec-2024 15:46:53 Africa/Lagos] PHP Fatal error:  Uncaught Error: Cannot use object of type stdClass as array in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php:336
+Stack trace:
+#0 /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php(121): Cable->purchaseCableWithBasicAuthentication()
+#1 /home1/databser/bizdataconnects.com.ng/api/cabletv/index.php(238): Cable->purchaseCableTv()
+#2 {main}
+  thrown in /home1/databser/bizdataconnects.com.ng/core/Controllers/Cable.php on line 336

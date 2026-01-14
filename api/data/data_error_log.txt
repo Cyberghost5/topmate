@@ -1,0 +1,1 @@
+{"status":"fail","message":"MTN SME data service not available at the moment. Please try again later."}
