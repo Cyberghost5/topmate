@@ -754,6 +754,8 @@
 					CURLOPT_FOLLOWLOCATION => true,
 					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 					CURLOPT_CUSTOMREQUEST => 'POST',
+					CURLOPT_SSL_VERIFYPEER => false,
+					CURLOPT_SSL_VERIFYHOST => false,
 					CURLOPT_POSTFIELDS =>'{
 						"provider": "'.$provider.'",
 						"quantity": "'.$quantity.'",
@@ -769,6 +771,10 @@
 				$exereq = curl_exec($curl);
 				$result=json_decode($exereq);
 				curl_close($curl);
+
+				if($exereq){
+					return $this->createPopMessage("Error!!","Error: $exereq","red");
+				}
 				
 				if($result->status == "success"){
 					header("Location: transaction-details?ref=$transref");
@@ -809,6 +815,8 @@
 				CURLOPT_FOLLOWLOCATION => true,
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_POSTFIELDS =>'{
 					"provider": "'.$provider.'",
 					"meternumber": "'.$meternumber.'",
@@ -826,10 +834,10 @@
 			curl_close($curl);
 				
 			if($result->status == "success"){
-				return $result->msg;
+				return $result->msg ?? "Verified";
 			}
 			else{
-				return $result->msg;
+				return $result->msg ?? "Verification Failed";
 			}
 			
 		}
@@ -855,6 +863,8 @@
 					CURLOPT_FOLLOWLOCATION => true,
 					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 					CURLOPT_CUSTOMREQUEST => 'POST',
+					CURLOPT_SSL_VERIFYPEER => false,
+					CURLOPT_SSL_VERIFYHOST => false,
 					CURLOPT_POSTFIELDS =>'{
 						"provider": "'.$provider.'",
 						"phone": "'.$phone.'",

@@ -34,6 +34,11 @@
                 return $this->purchaseExamWithBasicAuthentication($body,$host,$hostuserurl,$apiKey,$examid);
             }
 
+            if(strpos($host, 'ringo') !== false){
+                $hostuserurl="https://www.api.ringo.ng/api/agent/p2";
+                return $this->purchaseExamWithRingo($body,$host,$hostuserurl,$apiKey,$examid);
+            }
+
             // ------------------------------------------
             //  Purchase Exam Pin
             // ------------------------------------------
@@ -230,6 +235,75 @@
             else{
                 $response["status"] = "fail";
                 $response["msg"] = "Server/Network Error: ".$result->msg;
+                file_put_contents("exampin_purchase_error_log.txt",json_encode($result));
+            }
+
+            return $response;
+		}
+
+        public function purchaseExamWithRingo($body,$host,$hostuserurl,$apiKey,$examid){
+        
+           
+            // ---------------------------------------------------------------
+            //  Purchase Exam Pin
+            // ---------------------------------------------------------------
+        
+            $headers = array(
+                'Content-Type: application/json',
+                'Accept: application/json',
+            );
+            if (strpos($apiKey, ':') !== false) {
+                $parts = explode(':', $apiKey, 2);
+                $headers[] = 'email: ' . $parts[0];
+                $headers[] = 'password: ' . $parts[1];
+            }
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => $host,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>'{
+                "serviceCode" : "WAB",
+                "amount": "1000", // CHange to amount if required
+                "type": "'.strtoupper($examid).'",
+                "pinNo": "'.$body->quantity.'",
+                "request_id" : "'.$body->ref.'",
+            }',
+            CURLOPT_HTTPHEADER => $headers,
+            ));
+
+            $exereq = curl_exec($curl);
+
+            $err = curl_error($curl);
+            
+            if($err){
+                $response["status"] = "fail";
+                $response["msg"] = "Server Connection Error";
+                $response["api_response_log"]=json_encode($response)." : ".$err;
+                file_put_contents("exampin_purchase_error_log.txt2",json_encode($response).$err);
+                curl_close($curl);
+                return $response;
+            }
+
+            $result=json_decode($exereq);
+            curl_close($curl);
+
+             //Log API Response To Database
+             $response["api_response_log"]=$exereq;
+
+            if($result->status=='successful' || $result->status=='success' || $result->status=='200'){
+                $response["status"] = "success";
+                $response["msg"] = $result->pin;
+            }
+            else{
+                $response["status"] = "fail";
+                $response["msg"] = "Server/Network Error: ".$result->message;
                 file_put_contents("exampin_purchase_error_log.txt",json_encode($result));
             }
 

@@ -47,6 +47,90 @@
                
             }
 
+            // Add ringo
+            if(strpos($host, 'ringo.ng') !== false){
+
+                $response = array();
+
+                $ultimateRequest = '{
+                    "serviceCode": "V-ELECT",
+                    "disco": "'.$electricityid.'",
+                    "meterNo": "'.$body->meternumber.'",
+                    "type": "'.strtoupper($body->metertype).'"
+                }';
+
+                $headers = array(
+                    'Content-Type: application/json',
+                    'Accept: application/json',
+                );
+                if (strpos($apiKey, ':') !== false) {
+                    $parts = explode(':', $apiKey, 2);
+                    $headers[] = 'email: ' . $parts[0];
+                    $headers[] = 'password: ' . $parts[1];
+                }
+
+                // ------------------------------------------
+                //  Verify Meter No
+                // ------------------------------------------
+            
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => $host,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_POSTFIELDS => $ultimateRequest,
+                CURLOPT_HTTPHEADER => $headers,
+                ));
+
+                $exereq = curl_exec($curl);
+                $err = curl_error($curl);
+                
+                if($err){
+                    $response["status"] = "fail";
+                    $response["msg"] = "Server Connection Error";
+                    file_put_contents("meter_ver_error_log.txt",json_encode($response).$err);
+                    curl_close($curl);
+                    return $response;
+                }
+
+
+    
+                $result=json_decode($exereq);
+                curl_close($curl);
+                
+            
+                if(isset($result->Customer_Name)){
+                    $response["status"] = "success";
+                    $response["msg"] = $result->Customer_Name;
+                    $response["others"] = $result;
+                }
+                elseif(isset($result->name)){
+                    $response["status"] = "success";
+                    $response["msg"] = $result->name;
+                    $response["others"] = $result;
+                }elseif(isset($result->message->details->customer_name)){
+                    $response["status"] = "success";
+                    $response["msg"] = $result->message->details->customer_name;
+                    $response["others"] = $result;
+                }
+                else{
+                    $response["status"] = "fail";
+                    file_put_contents("meter_ver_error_log.txt",json_encode($result)." : ".json_encode($headers)." : ".$ultimateRequest);
+                }
+
+                return $response;
+
+                exit;
+
+            }
+
             $payload = '{
                 "meter_number": "'.$body->meternumber.'",
             	"meter_type" : "'.strtolower($body->metertype).'",
@@ -169,6 +253,11 @@
                 }';
                 
                 $aunType = "Bearer";
+            }
+
+            if(strpos($host, 'ringo') !== false){
+                $hostuserurl="https://www.api.ringo.ng/api/agent/p2";
+                return $this->purchaseMeterWithRingo($body,$host,$hostuserurl,$apiKey,$electricityid,$provider);
             }
 
            
@@ -381,6 +470,116 @@
             else{$apiStatus = "";}
 
              if($apiStatus == 'successful' || $apiStatus == 'success'){
+                $response["status"] = "success";
+                $response["msg"] = $result->token;
+            }
+            elseif($apiStatus == 'failed' || $apiStatus == 'fail'){
+                $response["status"] = "fail";
+                $response["msg"] = "Transaction Failed, Please Try Again Later";
+
+                //If Server Returns Message, Capture It If Message Is Not About A Low Wallet Balance
+                //If Server Returns Message, Capture It If Message Is Not About A Low Wallet Balance
+                if(isset($result->msg)){
+                    if(strpos($result->msg, 'balance') !== false || strpos($result->msg, 'insufficient') !== false){$response["msg"] ="Unable To Complete Transaction: Please Report To Admin. Error Code BB.";}
+                    else{$response["msg"] = $result->msg;}
+                }
+
+                //If Server Returns Message, Capture It If Message Is Not About A Low Wallet Balance
+                if(isset($result->error[0])){
+                    if(strpos($result->error[0], 'balance') !== false || strpos($result->error[0], 'insufficient') !== false){$response["msg"] ="Unable To Complete Transaction: Please Report To Admin. Error Code BB.";}
+                    else{$response["msg"] = $result->error[0];}
+                }   
+                
+                //If Server Returns Message, Capture It If Message Is Not About A Low Wallet Balance
+                if(isset($result->message)){
+                    if(strpos($result->message, 'balance') !== false || strpos($result->message, 'insufficient') !== false){$response["msg"] ="Unable To Complete Transaction: Please Report To Admin. Error Code BB.";}
+                    else{$response["msg"] = $result->message;}
+                }
+
+                //Log Error On Server
+                file_put_contents("meter_fail_log.txt",json_encode($result));
+            }
+            elseif($apiStatus == 'processing' || $apiStatus == 'process'){
+                $response["status"] = "processing";
+                file_put_contents("meter_processing_log.txt",json_encode($result));
+            }
+            elseif($apiStatus == 'pending'){
+                $response["status"] = "processing";
+                file_put_contents("meter_processing_log.txt",json_encode($result));
+            }
+            else{
+                $response["status"] = "fail";
+                $response["msg"] = "Transaction Failed, Please Try Again Later";
+                //Log Error On Server
+                file_put_contents("meter_fail_log.txt",json_encode($result));
+            }
+
+            return $response;
+		}
+
+        public function purchaseMeterWithRingo($body,$host,$hostuserurl,$apiKey,$electricityid,$provider){        
+           
+            // ------------------------------------------
+            //  Purchase Electricity
+            // ------------------------------------------
+
+            $headers = array(
+                'Content-Type: application/json',
+                'Accept: application/json',
+            );
+            if (strpos($apiKey, ':') !== false) {
+                $parts = explode(':', $apiKey, 2);
+                $headers[] = 'email: ' . $parts[0];
+                $headers[] = 'password: ' . $parts[1];
+            }
+        
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => $host,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS =>'{
+                "serviceCode" : "P-ELECT",
+                "disco": "'.$electricityid.'",
+                "meterNo": "'.$body->meternumber.'",
+                "type": "'.strtoupper($body->metertype).'",
+                "amount": "'.$body->amount.'",
+                "phone": "'.$body->phone.'",
+                "request_id" : "'.$body->ref.'",
+            }',
+            CURLOPT_HTTPHEADER => $headers,
+            ));
+
+            $exereq = curl_exec($curl);
+
+            $err = curl_error($curl);
+            
+            if($err){
+                $response["status"] = "fail";
+                $response["msg"] = "Server Connection Error: ".$err;
+                $response["api_response_log"]=json_encode($response)." : ".$err;
+                file_put_contents("meter_purchase_connect_error_log.txt",json_encode($response));
+                curl_close($curl);
+                return $response;
+            }
+
+            $result=json_decode($exereq);
+            curl_close($curl);
+
+            //Log API Response To Database
+            $response["api_response_log"]=$exereq;
+
+            //Get API Status
+            if(isset($result->Status)){$apiStatus = strtolower($result->Status);}
+            elseif(isset($result->status)){$apiStatus = strtolower($result->status);}
+            else{$apiStatus = "";}
+
+             if($apiStatus == 'successful' || $apiStatus == 'success' || $apiStatus == '200'){
                 $response["status"] = "success";
                 $response["msg"] = $result->token;
             }
