@@ -36,6 +36,96 @@
                 $aunType = "Token";
                 $host = $host . "?smart_card_number=".$body->iucnumber."&cablename=".$provider;
             }
+
+            // Add ringo API like airtime too
+            if(strpos($host, 'ringo.ng') !== false){
+                
+                $response = array();
+
+                // ------------------------------------------
+                //  Verify Cable Plan
+                // ------------------------------------------
+
+                $curl = curl_init();
+                // Build headers with optional username/password if apiKey is in username:password format
+                $headers = array(
+                    'Content-Type: application/json',
+                    'Accept: application/json',
+                );
+                if (strpos($apiKey, ':') !== false) {
+                    $parts = explode(':', $apiKey, 2);
+                    $headers[] = 'email: ' . $parts[0];
+                    $headers[] = 'password: ' . $parts[1];
+                }
+
+                // Change the network ID parameter name to product_id
+                if($cableid == 1) {
+                    $ultimateRequest = '{
+                        "serviceCode" : "V-TV",
+                        "type" : "GOTV",
+                        "smartCardNo" : "' . $body->iucnumber . '"
+                    }';
+                    // $cableid = "MFIN-5-OR"; // MTN
+                } elseif($cableid == 3) {
+                    $ultimateRequest = '{
+                        "serviceCode" : "V-TV",
+                        "type" : "STARTIMES",
+                        "smartCardNo" : "' . $body->iucnumber . '"
+                    }';
+                    // $cableid = "MFIN-1-OR"; // Airtel
+                } elseif($cableid == 2) {
+                    $ultimateRequest = '{
+                        "serviceCode" : "V-TV",
+                        "type" : "DSTV",
+                        "smartCardNo" : "' . $body->iucnumber . '"
+                    }';
+                    // $cableid = "MFIN-6-OR"; // Glo
+                }
+
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://www.api.ringo.ng/api/agent/p2",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => $ultimateRequest,
+                    CURLOPT_HTTPHEADER => $headers,
+                ));
+
+                $exereq = curl_exec($curl);
+
+                $err = curl_error($curl);
+
+                if($err){
+                    $response["status"] = "fail";
+                    $response["msg"] = "Server Connection Error";
+                    file_put_contents("iuc_error_log2.txt",json_encode($response).$err);
+                    curl_close($curl);
+                    return $response;
+                }
+    
+                $result=json_decode($exereq);
+                curl_close($curl);
+                
+                
+                if(isset($result->customerName)){
+                    $response["status"] = "success";
+                    $response["msg"] = $result->customerName;
+                    $response["others"] = $result;
+                }
+                else{
+                    $response["status"] = "fail";
+                    $response["msg"] = "Invalid IUC Number";
+                    file_put_contents("iuc_error_log.txt",json_encode($result));
+                }
+
+                return $response;
+
+                exit;
+            }
              
             // ------------------------------------------
             //  Verify Cable Plan

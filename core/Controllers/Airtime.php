@@ -26,14 +26,14 @@
             }
             
             // Add Autopilot check
-        if(strpos($host, 'autopilot') !== false) {
-            return $this->purchaseAirtimeWithAutopilot($body, $host, $apiKey, $thenetworkId, $body->airtime_type);
-        }
-        
-            // Check If API Is Using SMEPlug
-        if (strpos($host, 'smeplug') !== false) {
-            return $this->purchaseAirtimeWithSmeplug($body, $host, $apiKey, $thenetworkId);
-        }
+            if(strpos($host, 'autopilot') !== false) {
+                return $this->purchaseAirtimeWithAutopilot($body, $host, $apiKey, $thenetworkId, $body->airtime_type);
+            }
+            
+                // Check If API Is Using SMEPlug
+            if (strpos($host, 'smeplug') !== false) {
+                return $this->purchaseAirtimeWithSmeplug($body, $host, $apiKey, $thenetworkId);
+            }
 
             if(strpos($host, 'n3tdata') !== false){
                 $hostuserurl="https://n3tdata.com/api/user/";
@@ -61,6 +61,11 @@
 
            if(strpos($host, 'topupbox.com') !== false){
                 return $this->purchaseAirtimeFromTopupBox($body,$host,$apiKey,$thenetworkId,$networkname);
+            }
+
+            // Add ringo
+            if(strpos($host, 'ringo.ng') !== false){
+                return $this->purchaseAirtimeWithRingo($body,$host,$apiKey,$thenetworkId);
             }
             
             
@@ -164,6 +169,12 @@
         $response = array();
         
         $curl = curl_init();
+        // Build headers with optional username/password if apiKey is in username:password format
+        $headers = array(
+            'Content-Type: application/json',
+            'Accept: application/json',
+            "Authorization: Bearer $apiKey"
+        );
         curl_setopt_array($curl, array(
             CURLOPT_URL =>  "https://autopilotng.com/api/live/v1/load/airtime-types",
             CURLOPT_RETURNTRANSFER => true,
@@ -176,11 +187,7 @@
             CURLOPT_POSTFIELDS => json_encode([
                 "networkId" => $networkId
             ]),
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json',
-                'Accept: application/json',
-                "Authorization: Bearer $apiKey"
-            ),
+            CURLOPT_HTTPHEADER => $headers,
         ));
 
         $exereq = curl_exec($curl);
@@ -213,123 +220,126 @@
         return $response;
     }
 
- public function purchaseAirtimeWithAutopilot($body, $host, $apiKey, $networkId, $airtimeType = null) {
-    $response = array();
+    public function purchaseAirtimeWithAutopilot($body, $host, $apiKey, $networkId, $airtimeType = null) {
+        $response = array();
 
-    // Map your airtime_type to Autopilot airtime types
-    $airtimeTypeMap = [
-        "VTU" => "VTU",
-        "Sharesell" => "SNS",  
-    ];
+        // Map your airtime_type to Autopilot airtime types
+        $airtimeTypeMap = [
+            "VTU" => "VTU",
+            "Sharesell" => "SNS",  
+        ];
 
-    // Use provided airtimeType or map it; fetch types if still null or invalid
-    if (!$airtimeType || !isset($airtimeTypeMap[$airtimeType])) {
-        $airtimeTypesResponse = $this->getAutopilotAirtimeTypes($host, $apiKey, $networkId);
-        if ($airtimeTypesResponse["status"] === "success" && !empty($airtimeTypesResponse["airtime_types"])) {
-            $availableTypes = $airtimeTypesResponse["airtime_types"];
-            $mappedType = $airtimeType ? ($airtimeTypeMap[$airtimeType] ?? $airtimeType) : null;
-            $airtimeType = in_array($mappedType, $availableTypes) ? $mappedType : $availableTypes[0];
+        // Use provided airtimeType or map it; fetch types if still null or invalid
+        if (!$airtimeType || !isset($airtimeTypeMap[$airtimeType])) {
+            $airtimeTypesResponse = $this->getAutopilotAirtimeTypes($host, $apiKey, $networkId);
+            if ($airtimeTypesResponse["status"] === "success" && !empty($airtimeTypesResponse["airtime_types"])) {
+                $availableTypes = $airtimeTypesResponse["airtime_types"];
+                $mappedType = $airtimeType ? ($airtimeTypeMap[$airtimeType] ?? $airtimeType) : null;
+                $airtimeType = in_array($mappedType, $availableTypes) ? $mappedType : $availableTypes[0];
+            } else {
+                $response["status"] = "fail";
+                $response["msg"] = "Failed to determine airtime type";
+                return $response;
+            }
         } else {
-            $response["status"] = "fail";
-            $response["msg"] = "Failed to determine airtime type";
-            return $response;
+            $airtimeType = $airtimeTypeMap[$airtimeType];
         }
-    } else {
-        $airtimeType = $airtimeTypeMap[$airtimeType];
-    }
 
-    // Log the selected airtimeType for debugging
-    file_put_contents("autopilot_selected_airtime_type.txt", "Selected airtimeType: $airtimeType for networkId: $networkId\n", FILE_APPEND);
+        // Log the selected airtimeType for debugging
+        file_put_contents("autopilot_selected_airtime_type.txt", "Selected airtimeType: $airtimeType for networkId: $networkId\n", FILE_APPEND);
 
-    // Ensure reference is between 25 and 30 characters
-    $reference = $body->ref;
-    $originalLength = strlen($reference);
+        // Ensure reference is between 25 and 30 characters
+        $reference = $body->ref;
+        $originalLength = strlen($reference);
 
-    if ($originalLength < 25 || $originalLength > 30) {
-        // Use a prefix and a shortened unique ID
-        $prefix = "AIR_"; // 4 characters
-        $uniquePart = substr(uniqid(), -8); // Last 8 chars of uniqid (e.g., "64f2a3b1")
-        $timestamp = substr((string)time(), -6); // Last 6 digits of timestamp (e.g., "756767")
-        
-        // Build reference: prefix + original ref (trimmed) + unique parts
-        $baseRef = $prefix . substr($reference, 0, 10); // Limit original ref to 10 chars
-        $remainingLength = 30 - strlen($baseRef . $uniquePart . $timestamp); // Calculate space left
-        $padding = str_pad("", max(0, $remainingLength), "0"); // Pad with zeros if needed
-        
-        $reference = $baseRef . $uniquePart . $padding . $timestamp;
-        
-        // Trim to 30 chars if still too long
-        $reference = substr($reference, 0, 30);
-        
-        // Ensure minimum length (shouldn’t happen but as a safeguard)
-        if (strlen($reference) < 25) {
-            $reference = str_pad($reference, 25, "0");
+        if ($originalLength < 25 || $originalLength > 30) {
+            // Use a prefix and a shortened unique ID
+            $prefix = "AIR_"; // 4 characters
+            $uniquePart = substr(uniqid(), -8); // Last 8 chars of uniqid (e.g., "64f2a3b1")
+            $timestamp = substr((string)time(), -6); // Last 6 digits of timestamp (e.g., "756767")
+            
+            // Build reference: prefix + original ref (trimmed) + unique parts
+            $baseRef = $prefix . substr($reference, 0, 10); // Limit original ref to 10 chars
+            $remainingLength = 30 - strlen($baseRef . $uniquePart . $timestamp); // Calculate space left
+            $padding = str_pad("", max(0, $remainingLength), "0"); // Pad with zeros if needed
+            
+            $reference = $baseRef . $uniquePart . $padding . $timestamp;
+            
+            // Trim to 30 chars if still too long
+            $reference = substr($reference, 0, 30);
+            
+            // Ensure minimum length (shouldn’t happen but as a safeguard)
+            if (strlen($reference) < 25) {
+                $reference = str_pad($reference, 25, "0");
+            }
         }
-    }
 
-    // Log the reference for debugging
-    file_put_contents("autopilot_reference_log.txt", "Generated reference: $reference (length: " . strlen($reference) . ")\n", FILE_APPEND);
+        // Log the reference for debugging
+        file_put_contents("autopilot_reference_log.txt", "Generated reference: $reference (length: " . strlen($reference) . ")\n", FILE_APPEND);
 
-    $payload = [
-        "networkId" => $networkId,
-        "airtimeType" => $airtimeType,
-        "amount" => $body->amount,
-        "phone" => $body->phone,
-        "reference" => $reference // Updated reference
-    ];
+        $payload = [
+            "networkId" => $networkId,
+            "airtimeType" => $airtimeType,
+            "amount" => $body->amount,
+            "phone" => $body->phone,
+            "reference" => $reference // Updated reference
+        ];
 
-    // Add quantity for SNS airtime type if applicable
-    if (strtoupper($airtimeType) === "SNS") {
-        $payload["quantity"] = "1"; // Default to 1 as per Autopilot spec
-    }
+        // Add quantity for SNS airtime type if applicable
+        if (strtoupper($airtimeType) === "SNS") {
+            $payload["quantity"] = "1"; // Default to 1 as per Autopilot spec
+        }
 
-    $curl = curl_init();
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => "https://autopilotng.com/api/live/v1/airtime",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_HTTPHEADER => array(
+        $curl = curl_init();
+        // Build headers with optional username/password if apiKey is in username:password format
+        $headers = array(
             'Content-Type: application/json',
             'Accept: application/json',
             "Authorization: Bearer $apiKey"
-        ),
-    ));
+        );
 
-    $exereq = curl_exec($curl);
-    $err = curl_error($curl);
-    
-    if ($err) {
-        $response["status"] = "fail";
-        $response["msg"] = "Server Connection Error: " . $err;
-        $response["api_response_log"] = json_encode($response) . " : " . $err;
-        file_put_contents("autopilot_airtime_error_log.txt", json_encode($response));
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://autopilotng.com/api/live/v1/airtime",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($payload),
+            CURLOPT_HTTPHEADER => $headers,
+        ));
+
+        $exereq = curl_exec($curl);
+        $err = curl_error($curl);
+        
+        if ($err) {
+            $response["status"] = "fail";
+            $response["msg"] = "Server Connection Error: " . $err;
+            $response["api_response_log"] = json_encode($response) . " : " . $err;
+            file_put_contents("autopilot_airtime_error_log.txt", json_encode($response));
+            curl_close($curl);
+            return $response;
+        }
+
+        $result = json_decode($exereq);
         curl_close($curl);
+
+        $response["api_response_log"] = $exereq;
+
+        if ($result->status === true && $result->code === 200) {
+            $response["status"] = "success";
+            $response["true_response"] = $result->data->message;
+            file_put_contents("autopilot_airtime_success_log.txt", json_encode($result));
+        } else {
+            $response["status"] = "fail";
+            $response["msg"] = $result->data->message ?? "Server/Network Error";
+            file_put_contents("autopilot_airtime_fail_log.txt", json_encode($result));
+        }
+
         return $response;
     }
-
-    $result = json_decode($exereq);
-    curl_close($curl);
-
-    $response["api_response_log"] = $exereq;
-
-    if ($result->status === true && $result->code === 200) {
-        $response["status"] = "success";
-        $response["true_response"] = $result->data->message;
-        file_put_contents("autopilot_airtime_success_log.txt", json_encode($result));
-    } else {
-        $response["status"] = "fail";
-        $response["msg"] = $result->data->message ?? "Server/Network Error";
-        file_put_contents("autopilot_airtime_fail_log.txt", json_encode($result));
-    }
-
-    return $response;
-}
 
 
         //Purchase Airtime
@@ -589,72 +599,166 @@
             return $response;
 		}
 
-    public function purchaseAirtimeWithSmeplug($body, $host, $apiKey, $thenetworkId) {
-        $response = array();
+        public function purchaseAirtimeWithSmeplug($body, $host, $apiKey, $thenetworkId) {
+            $response = array();
 
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://smeplug.ng/api/v1/airtime/purchase",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode([
-                "network_id" => $thenetworkId,
-                "phone" => $body->phone,
-                "amount" => $body->amount,
-                "customer_reference" => $body->ref
-            ]),
-            CURLOPT_HTTPHEADER => array(
+            $curl = curl_init();
+            // Build headers with optional username/password if apiKey is in username:password format
+            $headers = array(
                 'Content-Type: application/json',
                 'Accept: application/json',
                 "Authorization: Bearer $apiKey"
-            ),
-        ));
+            );
+            if (strpos($apiKey, ':') !== false) {
+                $parts = explode(':', $apiKey, 2);
+                $headers[] = 'username: ' . $parts[0];
+                $headers[] = 'password: ' . $parts[1];
+            }
 
-        $exereq = curl_exec($curl);
-        $err = curl_error($curl);
-        
-        if ($err) {
-            $response["status"] = "fail";
-            $response["msg"] = "Server Connection Error: " . $err;
-            $response["api_response_log"] = json_encode($response) . " : " . $err;
-            file_put_contents("smeplug_airtime_error_log.txt", json_encode($response));
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://smeplug.ng/api/v1/airtime/purchase",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode([
+                    "network_id" => $thenetworkId,
+                    "phone" => $body->phone,
+                    "amount" => $body->amount,
+                    "customer_reference" => $body->ref
+                ]),
+                CURLOPT_HTTPHEADER => $headers,
+            ));
+
+            $exereq = curl_exec($curl);
+            $err = curl_error($curl);
+            
+            if ($err) {
+                $response["status"] = "fail";
+                $response["msg"] = "Server Connection Error: " . $err;
+                $response["api_response_log"] = json_encode($response) . " : " . $err;
+                file_put_contents("smeplug_airtime_error_log.txt", json_encode($response));
+                curl_close($curl);
+                return $response;
+            }
+
+            $result = json_decode($exereq);
             curl_close($curl);
+
+            $response["api_response_log"] = $exereq;
+            file_put_contents("smeplug_airtime_response_log.txt", json_encode($result));
+
+            if (isset($result->status) && $result->status === true) {
+                $response["status"] = "success";
+                $response["msg"] = "Airtime purchase successful";
+                if (isset($result->data->message)) {
+                    $response["true_response"] = $result->data->message;
+                }
+                file_put_contents("smeplug_airtime_success_log.txt", json_encode($result));
+            } elseif (isset($result->data->current_status) && in_array($result->data->current_status, ['pending', 'processing'])) {
+                $response["status"] = "processing";
+                $response["true_response"] = $result->data->current_status;
+                file_put_contents("smeplug_airtime_processing_log.txt", json_encode($result));
+            } else {
+                $response["status"] = "fail";
+                $response["msg"] = isset($result->message) ? $result->message : "Server/Network Error";
+                if (isset($result->message) && (strpos($result->message, 'balance') !== false || strpos($result->message, 'insufficient') !== false)) {
+                    $response["msg"] = "Unable To Complete Transaction: Please Report To Admin. Error Code BB.";
+                }
+                file_put_contents("smeplug_airtime_error_log.txt", json_encode($result));
+            }
+
             return $response;
         }
 
-        $result = json_decode($exereq);
-        curl_close($curl);
+        public function purchaseAirtimeWithRingo($body, $host, $apiKey, $thenetworkId) {
+            $response = array();
 
-        $response["api_response_log"] = $exereq;
-        file_put_contents("smeplug_airtime_response_log.txt", json_encode($result));
+            $curl = curl_init();
+            // Build headers with optional username/password if apiKey is in username:password format
+            $headers = array(
+                'Content-Type: application/json',
+                'Accept: application/json',
+            );
+            if (strpos($apiKey, ':') !== false) {
+                $parts = explode(':', $apiKey, 2);
+                $headers[] = 'email: ' . $parts[0];
+                $headers[] = 'password: ' . $parts[1];
+            }
 
-        if (isset($result->status) && $result->status === true) {
-            $response["status"] = "success";
-            $response["msg"] = "Airtime purchase successful";
-            if (isset($result->data->message)) {
-                $response["true_response"] = $result->data->message;
+            // Change the network ID parameter name to product_id
+            if($thenetworkId == 1) {
+                $thenetworkId = "MFIN-5-OR"; // MTN
+            } elseif($thenetworkId == 4) {
+                $thenetworkId = "MFIN-1-OR"; // Airtel
+            } elseif($thenetworkId == 2) {
+                $thenetworkId = "MFIN-6-OR"; // Glo
+            } elseif($thenetworkId == 3) {
+                $thenetworkId = "MFIN-2-OR"; // 9mobile
             }
-            file_put_contents("smeplug_airtime_success_log.txt", json_encode($result));
-        } elseif (isset($result->data->current_status) && in_array($result->data->current_status, ['pending', 'processing'])) {
-            $response["status"] = "processing";
-            $response["true_response"] = $result->data->current_status;
-            file_put_contents("smeplug_airtime_processing_log.txt", json_encode($result));
-        } else {
-            $response["status"] = "fail";
-            $response["msg"] = isset($result->message) ? $result->message : "Server/Network Error";
-            if (isset($result->message) && (strpos($result->message, 'balance') !== false || strpos($result->message, 'insufficient') !== false)) {
-                $response["msg"] = "Unable To Complete Transaction: Please Report To Admin. Error Code BB.";
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $host, //"https://www.api.ringo.ng/api/agent/p2",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode([
+                    "serviceCode" => "VAR",
+                    "msisdn" => $body->phone,
+                    "amount" => $body->amount,
+                    "request_id" => $body->ref,
+                    "product_id" => $thenetworkId // MTN - MFIN-5-OR Airtel - MFIN-1-OR Glo - MFIN-6-OR 9mobile - MFIN-2-OR
+                ]),
+                CURLOPT_HTTPHEADER => $headers,
+            ));
+
+            $exereq = curl_exec($curl);
+            $err = curl_error($curl);
+            
+            if ($err) {
+                $response["status"] = "fail";
+                $response["msg"] = "Server Connection Error: " . $err;
+                $response["api_response_log"] = json_encode($response) . " : " . $err;
+                file_put_contents("ringo_error_log.txt", json_encode($response));
+                curl_close($curl);
+                return $response;
             }
-            file_put_contents("smeplug_airtime_error_log.txt", json_encode($result));
+
+            $result = json_decode($exereq);
+            curl_close($curl);
+
+            $response["api_response_log"] = $exereq;
+            file_put_contents("ringo_response_log.txt", json_encode($result));
+
+            if (isset($result->status) && $result->status === true) {
+                $response["status"] = "success";
+                $response["msg"] = "Airtime purchase successful";
+                if (isset($result->data->message)) {
+                    $response["true_response"] = $result->data->message;
+                }
+                file_put_contents("ringo_success_log.txt", json_encode($result));
+            } elseif (isset($result->data->current_status) && in_array($result->data->current_status, ['pending', 'processing'])) {
+                $response["status"] = "processing";
+                $response["true_response"] = $result->data->current_status;
+                file_put_contents("ringo_processing_log.txt", json_encode($result));
+            } else {
+                $response["status"] = "fail";
+                $response["msg"] = isset($result->message) ? $result->message : "Server/Network Error";
+                if (isset($result->message) && (strpos($result->message, 'balance') !== false || strpos($result->message, 'insufficient') !== false)) {
+                    $response["msg"] = "Unable To Complete Transaction: Please Report To Admin. Error Code BB.";
+                }
+                file_put_contents("ringo_error_log.txt", json_encode($result));
+            }
+
+            return $response;
         }
-
-        return $response;
-    }
 
 
     }

@@ -908,7 +908,7 @@
 			$host = $this->siteurl."/api/cabletv/";
 			$transkey=strip_tags($transkey);
 			$check=$this->model->verifyTransactionPin($this->userId,$transkey);
-			$transref = "TV".rand(100,999)."_".$transref;
+			$transref = "TV".rand(100,999);
 			if(is_object($check)){
 				
 				//Purchase Data
@@ -923,6 +923,8 @@
 					CURLOPT_FOLLOWLOCATION => true,
 					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 					CURLOPT_CUSTOMREQUEST => 'POST',
+					CURLOPT_SSL_VERIFYPEER => false,
+					CURLOPT_SSL_VERIFYHOST => false,
 					CURLOPT_POSTFIELDS =>'{
 						"provider": "'.$provider.'",
 						"phone": "'.$phone.'",
@@ -941,6 +943,10 @@
 				$exereq = curl_exec($curl);
 				$result=json_decode($exereq);
 				curl_close($curl);
+				// Handle cURL errors
+				if($exereq){
+					return $this->createPopMessage("Error!!","Error: $exereq","red");
+				}
 				//var_dump($result);die;
 				if($result->status == "success"){
 					header("Location: transaction-details?ref=$transref");
@@ -971,6 +977,8 @@
 				CURLOPT_FOLLOWLOCATION => true,
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_POSTFIELDS =>'{
 					"provider": "'.$provider.'",
 					"iucnumber": "'.$iucnumber.'"
@@ -983,14 +991,27 @@
 			));
 
 			$exereq = curl_exec($curl);
-			$result=json_decode($exereq);
+			$err = curl_error($curl);
 			curl_close($curl);
 			
-			if($result->status == "success"){
-				return $result->msg;
+			// Handle cURL errors
+			if($err){
+				return "Connection Error: " . $err;
+			}
+			
+			$result = json_decode($exereq);
+			
+			// Handle null or invalid JSON response
+			if($result === null){
+				file_put_contents("iuc_verify_error_log.txt", "Response: " . $exereq);
+				return "Verification failed: Invalid response from server.";
+			}
+			
+			if(isset($result->status) && $result->status == "success"){
+				return $result->msg ?? "Verified";
 			}
 			else{
-				return $result->msg;
+				return $result->msg ?? "Unable to verify IUC number. Please check and try again.";
 			}
 			
 		}
